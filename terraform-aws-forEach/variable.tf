@@ -30,5 +30,6 @@ variable "private_subnets_ciders" {
   default = {
     priv-1 = "10.10.3.0/24"
     priv-2 = "10.10.4.0/24"
+    priv-3 = "10.10.5.0/24"
   }
 }
