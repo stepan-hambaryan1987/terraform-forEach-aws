@@ -21,8 +21,8 @@ terraform {
 
 provider "aws" {
   region     = "us-east-1"
-  access_key = ""
-  secret_key = ""
+  #access_key = ""
+  #secret_key = ""
 }
 
 
@@ -37,7 +37,9 @@ locals {
     pub-2  = local.azs[1]
     priv-2 = local.azs[1]
   }
+  cluster_name = "${var.env}-my-cluster"
 }
+
 
 resource "aws_vpc" "main" {
   cidr_block = var.vpc_ciders
@@ -115,10 +117,9 @@ resource "aws_subnet" "public-subnet" {
 
 
   tags = {
-    Name                                     = "${var.env}-${each.key}"
-    AZ                                       = element(data.aws_availability_zones.available.names, index(keys(var.public_subnets_ciders), each.key))
-    "kubernetes.io/cluster/eks-arev-cluster" = "shared"
-    "kubernetes.io/role/elb"                 = "1"
+    Name                                          = "${var.env}-${each.key}"
+    "kubernetes.io/cluster/${local.cluster_name}" = "shared"
+    "kubernetes.io/role/elb"                      = "1"
   }
 }
 
@@ -131,10 +132,9 @@ resource "aws_subnet" "private-subnet" {
 
 
   tags = {
-    Name                                     = "${var.env}-${each.key}"
-    AZ                                       = element(data.aws_availability_zones.available.names, index(keys(var.private_subnets_ciders), each.key))
-    "kubernetes.io/cluster/eks-arev-cluster" = "shared"
-    "kubernetes.io/role/internal-elb"        = "1"
+    Name                                          = "${var.env}-${each.key}"
+    "kubernetes.io/cluster/${local.cluster_name}" = "shared"
+    "kubernetes.io/role/internal-elb"             = "1"
   }
 }
 

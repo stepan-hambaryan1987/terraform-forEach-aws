@@ -75,7 +75,7 @@ resource "aws_iam_role_policy_attachment" "amazon_ec2_container_registry_read_on
 #---- eks cluster ----#
 
 resource "aws_eks_cluster" "eks" {
-  name     = "${var.env}-my-cluster"
+  name     = local.cluster_name
   role_arn = aws_iam_role.master.arn
   version  = "1.29"
 
